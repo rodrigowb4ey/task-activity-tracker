@@ -17,15 +17,17 @@
           class="is-flex is-align-items-center is-justify-content-space-between"
         >
           <section>
-            <strong> 00:00:00 </strong>
+            <strong>
+              {{ elapsedTime }}
+            </strong>
           </section>
-          <button class="button">
+          <button class="button" @click="startCount">
             <span class="icon">
               <i class="fas fa-play"></i>
             </span>
             <span>Play</span>
           </button>
-          <button class="button">
+          <button class="button" @click="finishCount">
             <span class="icon">
               <i class="fas fa-stop"></i>
             </span>
@@ -42,5 +44,27 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "TaskForm",
+  data () {
+    return {
+      timeInSeconds: 0,
+      cronometer: 0,
+    }
+  },
+  computed: {
+    elapsedTime () : string {
+      return new Date(this.timeInSeconds * 1000).toISOString().substr(11, 8);
+    }
+  },
+  methods: {
+    startCount() {
+      // 1s = 1000 ms
+      this.cronometer = setInterval(() => {
+        this.timeInSeconds += 1;
+      }, 1000);      
+    },
+    finishCount() {
+      clearInterval(this.cronometer);
+    }
+  }
 });
 </script>
