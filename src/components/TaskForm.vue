@@ -10,30 +10,13 @@
           type="text"
           class="input"
           placeholder="Which task do you wish to start?"
+          v-model="description"
         />
       </div>
       <div class="column">
-        <div
-          class="is-flex is-align-items-center is-justify-content-space-between"
-        >
-          <section>
-            <strong>
-              {{ elapsedTime }}
-            </strong>
-          </section>
-          <button class="button" @click="startCount">
-            <span class="icon">
-              <i class="fas fa-play"></i>
-            </span>
-            <span>Play</span>
-          </button>
-          <button class="button" @click="finishCount">
-            <span class="icon">
-              <i class="fas fa-stop"></i>
-            </span>
-            <span>Stop</span>
-          </button>
-        </div>
+        <TaskTimer 
+          @toFinishedTimer="finishTask"
+        />        
       </div>
     </div>
   </div>
@@ -41,29 +24,23 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import TaskTimer from './TaskTimer.vue'
 
 export default defineComponent({
   name: "TaskForm",
+  components: {
+    TaskTimer
+  },
   data () {
     return {
-      timeInSeconds: 0,
-      cronometer: 0,
-    }
-  },
-  computed: {
-    elapsedTime () : string {
-      return new Date(this.timeInSeconds * 1000).toISOString().substr(11, 8);
+      description: ''
     }
   },
   methods: {
-    startCount() {
-      // 1s = 1000 ms
-      this.cronometer = setInterval(() => {
-        this.timeInSeconds += 1;
-      }, 1000);      
-    },
-    finishCount() {
-      clearInterval(this.cronometer);
+    finishTask(elapsedTime: number) : void {
+      console.log(elapsedTime);
+      console.log(this.description);
+      this.description = '';
     }
   }
 });
