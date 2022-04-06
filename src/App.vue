@@ -1,9 +1,9 @@
 <template>
-  <main class="columns is-gapless is-multiline">
+  <main class="columns is-gapless is-multiline" :class="{ 'dark-mode': darkModeIsActive }">
     <div class="column is-one-fifth">
-      <SideBar />
+      <SideBar @whenChangingTheme="applyThemeChange"/>
     </div>
-    <div class="column is-four-fifth">
+    <div class="column is-four-fifth content">
       <TaskForm @whenSavingTask="saveTask" />
       <div class="lista">
         <NewTask v-for="(task, index) in taskList" :key="index" :task="task" />
@@ -28,6 +28,7 @@ export default defineComponent({
   data() {
     return {
       taskList: [] as TaskInterface[],
+      darkModeIsActive: false
     };
   },
   computed: {
@@ -45,11 +46,25 @@ export default defineComponent({
     saveTask(task: TaskInterface) {
       this.taskList.push(task);
     },
+    applyThemeChange(darkModeIsActive: boolean) {
+      this.darkModeIsActive = darkModeIsActive;
+    }
   },
 });
 </script>
 
 <style>
+main {
+  --primary-bg: #fff;
+  --primary-text: #000;
+}
+main.dark-mode {
+  --primary-bg: #2b2d42;
+  --primary-text: #ddd;
+}
+.content {
+  background-color: var(--primary-bg);
+}
 .lista {
   padding: 1.25rem;
 }
